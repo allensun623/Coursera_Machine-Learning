@@ -108,7 +108,7 @@ def computeCost(X, y, theta):
     #J = 1 / 2m * sum((h-y)^2)
     #h = sum(theta_i*x_i)
     m = np.size(y, 0)  # number of training examples
-    h = np.dot(X, theta.T) # vector of hyposis
+    h = X.dot(theta) # vector of hyposis
     delta_sqr = np.sum(np.square(h - y ))
     J = 1 / (2*m) * delta_sqr
     return J
@@ -121,7 +121,7 @@ def gradientDescent(X, y, theta, alpha, iterations):
     m = y.size  # number of training examples
     
     for i in range(iterations):
-        deltaJ = np.dot((np.dot(X, theta.T) - y).T, X) / m        
+        deltaJ = ((X.dot(theta) - y)).T.dot(X) / m        
         theta = theta - alpha * deltaJ
         J_history.append(computeCost(X, y, theta))    
     return theta, J_history
