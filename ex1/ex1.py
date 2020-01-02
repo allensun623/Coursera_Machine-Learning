@@ -67,7 +67,6 @@ def part3_GradientDecent():
     m = data.shape[0]
     X = np.vstack(zip(np.ones(m),data[:,0]))
     y = data[:, 1]
-    print("X, ",X)
     theta = np.zeros(2)
     print("theta:" , theta)
 
@@ -94,7 +93,6 @@ def part3_GradientDecent():
     plt.plot(X[:, 1], X.dot(theta), '-', label='Linear regression')
     plt.legend(loc='upper left', framealpha=0.5, fontsize='x-large', numpoints=1)
     plt.show()
-
     #input("Program paused. Press Enter to continue...")
 
     # Predict values for population sizes of 35,000 and 70,000
