@@ -41,6 +41,7 @@ def gradientDescent(x, y, theta, alpha, num_iters):
 
     for i in range(num_iters):
         deltaJ = x.T.dot(x.dot(theta)-y)/m
+        print(deltaJ)
         theta = theta-alpha*deltaJ
         j_history[i] = computeCost(x, y, theta)
     return theta, j_history
@@ -60,7 +61,6 @@ print("cost: %0.4f " % J)
 
 theta, j_history = gradientDescent(X, Y, theta, alpha, iterations)
 print('Theta found by gradient descent: ', theta)
-print(j_history)
 plt.plot(X[:, 1], Y, 'rx', ms=10, label='Training data')
 plt.plot(X[:, 1], X.dot(theta), '-', label='Linear regression')
 plt.xlabel('Population of City in 10,000')

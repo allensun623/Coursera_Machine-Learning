@@ -67,8 +67,10 @@ def part3_GradientDecent():
     m = data.shape[0]
     X = np.vstack(zip(np.ones(m),data[:,0]))
     y = data[:, 1]
+    print("X, ",X)
     theta = np.zeros(2)
     print("theta:" , theta)
+
 
     # compute and display initial cost
     J = computeCost(X, y, theta)
@@ -93,7 +95,7 @@ def part3_GradientDecent():
     plt.legend(loc='upper left', framealpha=0.5, fontsize='x-large', numpoints=1)
     plt.show()
 
-    input("Program paused. Press Enter to continue...")
+    #input("Program paused. Press Enter to continue...")
 
     # Predict values for population sizes of 35,000 and 70,000
     predict1 = np.array([1, 3.5]).dot(theta)
@@ -105,34 +107,24 @@ def part3_GradientDecent():
 def computeCost(X, y, theta):
     #J = 1 / 2m * sum((h-y)^2)
     #h = sum(theta_i*x_i)
-    m = y.size  # number of training examples
-    delta_sqr = 0.0
-    for X_matrix, y_cost in zip(X, y):
-        h = 0.0
-        for x_i, theta_i in zip(X_matrix, theta):
-            h = h + x_i * theta_i
-        delta_sqr = delta_sqr + np.square(h - y_cost)
+    m = np.size(y, 0)  # number of training examples
+    h = np.dot(X, theta.T) # vector of hyposis
+    delta_sqr = np.sum(np.square(h - y ))
     J = 1 / (2*m) * delta_sqr
     return J
 
 def gradientDescent(X, y, theta, alpha, iterations):
-    #theta_j: = theta_j - alpha*(1/m)*sum((h-y)*xi_j)
+    #theta_j: = theta_j - alpha * deltaJ
+    #deltaJ = (1/m)*sum((h-y)*xi_j)
     #h = sum(theta_i*x_i)
     J_history = []
     m = y.size  # number of training examples
-    for i_iteration in range(iterations):
-        for j in range(len(theta)):
-            deltaJ = 0.0   
-            for X_matrix, y_cost in zip(X, y):
-                h = 0.0
-                for x_i, theta_i in zip(X_matrix, theta):
-                    h = h + x_i * theta_i
-                deltaJ = deltaJ + (h-y_cost)*X_matrix[j]
-            theta[j] = theta[j] - alpha/m * deltaJ
+    
+    for i in range(iterations):
+        deltaJ = np.dot((np.dot(X, theta.T) - y).T, X) / m        
+        theta = theta - alpha * deltaJ
         J_history.append(computeCost(X, y, theta))    
     return theta, J_history
-
-
 
     # ============= Part 4: Visualizing J(theta_0, theta_1) =============
 def part4_VisualizingJ():    
@@ -210,7 +202,7 @@ def part4_VisualizingJ():
 def main():
     #part1_BasicFunction()
     #part2_Plotting()
-    #part3_GradientDecent()
-    part4_VisualizingJ()
+    part3_GradientDecent()
+    #part4_VisualizingJ()
 if __name__ == "__main__":
     main()
