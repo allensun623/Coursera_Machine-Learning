@@ -127,8 +127,10 @@ def plotDecisionBoundary(m, theta, X, y):
     neg = np.where(y==0)
     p1 = plt.scatter(x1[pos], x2[pos], marker='P', c='b')
     p2 = plt.scatter(x1[neg], x2[neg], marker='o', c='y')
-    plot_x = np.array([np.min(x1)-2, np.max(x1+2)])
+    plot_x = np.array([np.min(x1)-2, np.max(x1)+2])
+    print("plot_x: ", plot_x)
     plot_y = -1/theta[2]*(theta[1]*plot_x+theta[0])
+    print("plot_y: ", plot_y)
     plt.plot(plot_x, plot_y)
     # Labels and Legend
     plt.legend((p1, p2), 
