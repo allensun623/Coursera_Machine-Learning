@@ -5,7 +5,8 @@ use('TkAgg')
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.optimize import minimize
-import plot_decision_boundary as plt_booundry
+import plot_decision_boundary as plt_boundry
+import pysnooper
 
     # ==================== Part 1: Plotting ====================
 def part1_plotting(X, y):
@@ -60,6 +61,9 @@ def gradient(init_theta, X, y):
     g = 1/m*(h-y).T.dot(X)
     return g
 
+
+
+
     # ============= Part 3: Optimizing using scipy  =============
 def part3_optimizing_using_scipy(X, y):
     m, n, X, initial_theta = part2_ComputeCostAndGradient(X, y)
@@ -71,7 +75,7 @@ def part3_optimizing_using_scipy(X, y):
     # Print theta to screen
     print("Cost at theta found by scipy: %f" % cost)
     print("theta: ", theta)
-    plt_booundry.plot_decision_boundary(theta, X, y)
+    plt_boundry.plot_decision_boundary(theta, X, y)
     plotData(X, y)
     return m, X, theta
   
@@ -93,6 +97,26 @@ def predict(theta, X, y, m):
     accuracy = np.size(np.where(result_traning_y==y)) / m *100
     return accuracy
 
+def optimization(X, y):
+    m, n, X, initial_theta = part2_ComputeCostAndGradient(X, y)
+    J_history = iteration(initial_theta, X, y, m)
+    print("J_history", J_history)
+
+def iteration(theta, X, y, m):
+    iteration = 10
+    alpha = 0.01
+    lamda = 1
+    J_history = []
+    for i in range(iteration):
+        print("theta", theta)
+        g = gradient(theta, X, y)
+        print("gradient", g)
+        theta = theta * (1-alpha*lamda/m) - alpha/m*g
+        J = compute_cost(theta, X, y)
+        J_history.append(J)
+    return J
+
+
 def main():
     data = np.loadtxt('ex2data1.txt', delimiter=',')
     X = data[:, 0: 2]
@@ -101,6 +125,7 @@ def main():
     #part2_ComputeCostAndGradient(X, y)
     #part3_optimizing_using_scipy(X, y)
     part4_predict_and_accuracies(X,y)
+    #optimization(X, y)
 
 if __name__ == "__main__":
     main()
