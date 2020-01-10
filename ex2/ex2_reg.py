@@ -72,12 +72,11 @@ def gradient_function_reg(theta, X, y, Lambda):
 # ============= Part 2: Regularization and Accuracies =============
 
 def part2_regularization_and_accuracies(X, y):  
-    init_X = X
     X = map_feature(X[:, 0], X[:, 1])
     initial_theta = np.zeros(X.shape[1])
     # Optimize and plot boundary
 
-    Lambda = 100.0
+    Lambda = 0.0
     result = optimize(X, y, initial_theta, Lambda)
     theta = result.x
     cost = result.fun
@@ -103,7 +102,6 @@ def map_feature(x1, x2, degree=6):
 
 
 def optimize(X, y, initial_theta, Lambda):
-
     result = minimize(cost_function_reg, initial_theta, method='L-BFGS-B',
                jac=gradient_function_reg, args=(X, y, Lambda),
                options={'gtol': 1e-4, 'disp': False, 'maxiter': 1000})
@@ -141,7 +139,7 @@ def plot_decision_boundary(theta, x, y):
 #plot data with various lambda
 def part3_optional_excercises(X, y):
     result, Lambda, theta, X, y = part2_regularization_and_accuracies(X, y)
-    for Lambda in np.arange(0.0,100,10.0):
+    for Lambda in np.arange(0.0,10,1.0):
         theta = result.x
         print("lambda = " + str(Lambda))
         print("theta: ", ["%0.4f" % i for i in theta])
@@ -158,9 +156,9 @@ def main():
     data = np.loadtxt('ex2data2.txt', delimiter=',')
     X = data[:, 0: 2]
     y = data[:, 2]
-    part1_regularized_logistic_regression(X, y)
-    #part2_regularization_and_accuracies(X, y)
-    part3_optional_excercises(X, y)
+    #part1_regularized_logistic_regression(X, y)
+    part2_regularization_and_accuracies(X, y)
+    #part3_optional_excercises(X, y)
 
 if __name__ == "__main__":
     main()
