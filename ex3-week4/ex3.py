@@ -101,7 +101,7 @@ def part3_predict_one_vs_all(X, y):
     #  After ...
     X, all_theta = part2_vectorize_logistic_regression(X, y)
     pred = predict_one_vs_all(all_theta, X)
-    print("Training Set Accuracy: %f%%" % (np.sum(pred==(y%10))/np.size(pred)*100))
+    print("Training Set Accuracy: %f%%" % (np.mean(pred==(y%10))*100))
 
 def predict_one_vs_all(all_theta, X):
     pred = np.argmax((X.dot(all_theta.T)), axis=1)
