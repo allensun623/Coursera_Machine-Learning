@@ -3,6 +3,7 @@ import scipy.io
 import numpy as np
 from matplotlib import use
 use('TkAgg')
+import display_data as display
 
 
 #  Instructions
@@ -43,7 +44,8 @@ def part1_loading_and_visualizing_Data():
     rand_indices = np.random.permutation(range(m))
     sel = X[rand_indices[0:100], :]
 
-    displayData(sel)
+    display.display_data(sel, X)
+
 
 
 ## ============ Part 2: Vectorize Logistic Regression ============
@@ -70,7 +72,7 @@ def part3_predict_one_vs_all():
     print("\nTraining Set Accuracy: %f\n" % accuracy)
 
 def main():
-    pass
+    part1_loading_and_visualizing_Data()
 
 if __name__ == "__main__":
     main()
