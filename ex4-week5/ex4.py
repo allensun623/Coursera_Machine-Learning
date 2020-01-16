@@ -47,9 +47,7 @@ def part2_loading_parameters(X, y):
     thetainfo = scipy.io.loadmat('ex4weights.mat')
     theta1 = thetainfo['Theta1']
     theta2 = thetainfo['Theta2']
-    nn_params = np.concatenate((theta1.flatten(), theta2.flatten()))
-    print(nn_params)
-    print(np.shape(nn_params))
+    nn_params = np.hstack((theta1.ravel(), theta2.ravel()))
     return nn_params
 ## ================ Part 3: Compute Cost (Feedforward) ================
 #  To the neural network, you should first start by implementing the
@@ -63,22 +61,15 @@ def part2_loading_parameters(X, y):
 #  first so that it will be easier for you to debug. Later, in part 4, you
 #  will get to implement the regularized cost.
 #
-
-def part3_compute_cost(X, y):
-    ## Setup the parameters you will use for this exercise
-    input_layer_size  = 400  # 20x20 Input Images of Digits
-    hidden_layer_size = 25   # 25 hidden units
-    num_labels = 10          # 10 labels, from 1 to 10   
-                            # (note that we have mapped "0" to label 10)
+def part3_compute_cost(X, y, input_layer_size, hidden_layer_size, num_labels):
     nn_params = part2_loading_parameters(X, y)
     print("Feedforward Using Neural Network ...")
 
     # Weight regularization parameter (we set this to 0 here).
     Lambda = 0
 
-    J = nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
+    J, _ = nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
         num_labels, X, y, Lambda)
-
     print("Cost at parameters (loaded from ex4weights): %f \n(this value should be about 0.287629)\n" % J)
 
 def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
@@ -87,27 +78,15 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     Theta2 = np.reshape(nn_params[hidden_layer_size*(input_layer_size+1):,], (num_labels, hidden_layer_size+1)) # 10 * 26
     m, _ = np.shape(X)
     a1 = np.column_stack((np.ones((m, 1)), X))
-    a2_0 = sigmoid(a1.dot(Theta1.T))
-    a2 = np.column_stack((np.ones((m, 1)), a2_0))
+    z2 = a1.dot(Theta1.T)
+    a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
     a3 = sigmoid(a2.dot(Theta2.T))
     y_K = np.zeros((m, num_labels))
     y_K[np.arange(m), y-1] = 1
-    J = -1 / m * (np.sum(y_K*np.log(a3) + (1-y_K)*(np.log(1-a3))))
-    return J
-
-def nnCostFunc(params, input_layer_size, hidden_layer_size, num_labels, x, y, lamb):
-    theta1 = params[0:hidden_layer_size*(input_layer_size+1)].reshape((hidden_layer_size, input_layer_size+1))
-    theta2 = params[(hidden_layer_size*(input_layer_size+1)):].reshape((num_labels, hidden_layer_size+1))
-    m = np.size(x, 0)
-    a1 = np.concatenate((np.ones((m, 1)), x), axis=1)
-    z2 = a1.dot(theta1.T); l2 = np.size(z2, 0)
-    a2 = np.concatenate((np.ones((l2, 1)), sigmoid(z2)), axis=1)
-    z3 = a2.dot(theta2.T)
-    a3 = sigmoid(z3)
-    yt = np.zeros((m, num_labels))
-    yt[np.arange(m), y-1] = 1
-    j = 1 / m * np.sum(-yt*np.log(a3)-(1-yt)*np.log(1-a3))
-    return j
+    reg_cost = np.sum(Theta1[:, 1:]*Theta1[:, 1:]) +  np.sum(Theta2[:, 1:]*Theta2[:, 1:])
+    J = -1 / m * (np.sum(y_K*np.log(a3) + (1-y_K)*(np.log(1-a3)))) + \
+        Lambda / (2*m) * reg_cost
+    return J, a3
 
 def sigmoid(z):
     g = 1/(1+np.exp(-z))
@@ -118,13 +97,13 @@ def sigmoid(z):
 #  continue to implement the regularization with the cost.
 #
 
-def part4_implement_regularization(X, y):
+def part4_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels):
     print("Checking Cost Function (w/ Regularization) ...")
-
+    nn_params = part2_loading_parameters(X, y)
     # Weight regularization parameter (we set this to 1 here).
     Lambda = 1
 
-    J, _ = nnCostFunction(nn_params, input_layer_size, hidden_layer_size, num_labels, X, y, Lambda)
+    J, _ = nn_cost_function(nn_params, input_layer_size, hidden_layer_size, num_labels, X, y, Lambda)
 
     print("Cost at parameters (loaded from ex4weights): %f \n(this value should be about 0.383770)" % J)
 
@@ -139,11 +118,13 @@ def part4_implement_regularization(X, y):
 def part5_sigmoid_gradient(X, y):
     print("Evaluating sigmoid gradient...")
 
-    g = sigmoidGradient(np.array([1, -0.5, 0, 0.5, 1]))
+    g = sigmoid_gradient(np.array([1, -0.5, 0, 0.5, 1]))
     print("Sigmoid gradient evaluated at [1 -0.5 0 0.5 1]: ")
     print(g)
 
-
+def sigmoid_gradient(z):
+    g_prime = sigmoid(z)*(1-sigmoid(z))
+    return g_prime
 
 ## ================ Part 6: Initializing Pameters ================
 #  In this part of the exercise, you will be starting to implment a two
@@ -151,14 +132,20 @@ def part5_sigmoid_gradient(X, y):
 #  implementing a function to initialize the weights of the neural network
 #  (randInitializeWeights.m)
 
-def part6_initializing_pameters(X, y):
+def part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels):
     print("Initializing Neural Network Parameters ...")
 
-    initial_Theta1 = randInitializeWeights(input_layer_size, hidden_layer_size)
-    initial_Theta2 = randInitializeWeights(hidden_layer_size, num_labels)
+    initial_Theta1 = rand_initialize_weights(input_layer_size, hidden_layer_size)
+    initial_Theta2 = rand_initialize_weights(hidden_layer_size, num_labels)
 
     # Unroll parameters
-    initial_nn_params = np.hstack((initial_Theta1.T.ravel(), initial_Theta2.T.ravel()))
+    initial_nn_params = np.hstack((initial_Theta1.ravel(), initial_Theta2.ravel()))
+    return initial_nn_params
+
+def rand_initialize_weights(input_layer, output_layer):
+    epsilon = 0.12
+    theta = np.random.rand(input_layer, output_layer) * 2*epsilon - epsilon 
+    return theta
 
 
 ## =============== Part 7: Implement Backpropagation ===============
@@ -168,12 +155,14 @@ def part6_initializing_pameters(X, y):
 #  derivatives of the parameters.
 #
 
-def part7_implement_backpropagation(X, y):
+def part7_implement_backpropagation(X, y, input_layer_size, hidden_layer_size, num_labels):
     print("Checking Backpropagation... ")
 
-    #  Check gradients by running checkNNGradients
-    checkNNGradients()
+    #  Check gradients by running ckeck_nn_gradients
+    ckeck_nn_gradients()
 
+def ckeck_nn_gradients():
+    epsilon_derivative = 1e-4
 
 
 ## =============== Part 8: Implement Regularization ===============
@@ -261,11 +250,19 @@ def main():
     X = data['X']
     y = data['y']
     y = np.squeeze(y)
+    ## Setup the parameters you will use for this exercise
+    input_layer_size  = 400  # 20x20 Input Images of Digits
+    hidden_layer_size = 25   # 25 hidden units
+    num_labels = 10          # 10 labels, from 1 to 10   
+                            # (note that we have mapped "0" to label 10)
+
     #part1_loading_and_visualizing_data(X, y)
     #part2_loading_parameters(X, y)
-    part3_compute_cost(X, y)
-
-
+    #part3_compute_cost(X, y, input_layer_size, hidden_layer_size, num_labels)
+    #part4_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels)
+    #part5_sigmoid_gradient(X, y)
+    #part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part7_implement_backpropagation(X, y, input_layer_size, hidden_layer_size, num_labels)
 
 if __name__ == "__main__":
     main()
