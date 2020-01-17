@@ -177,6 +177,7 @@ def checkNNGradients(lamb):
     numgrad = computeNumericalGradient(nnCostFunc, nn_params,\
                                        (input_layer_size, hidden_layer_size, num_labels, x, y, lamb))
     print(numgrad, '\n', grad)
+    print(np.shape(grad))
     print('The above two columns you get should be very similar.\n \
     (Left-Your Numerical Gradient, Right-Analytical Gradient)')
     diff = slin.norm(numgrad-grad)/slin.norm(numgrad+grad)

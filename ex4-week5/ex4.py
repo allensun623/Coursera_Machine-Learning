@@ -135,8 +135,8 @@ def sigmoid_gradient(z):
 def part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels):
     print("Initializing Neural Network Parameters ...")
 
-    initial_Theta1 = rand_initialize_weights(input_layer_size, hidden_layer_size)
-    initial_Theta2 = rand_initialize_weights(hidden_layer_size, num_labels)
+    initial_Theta1 = rand_initialize_weights(input_layer_size+1, hidden_layer_size)
+    initial_Theta2 = rand_initialize_weights(hidden_layer_size+1, num_labels)
 
     # Unroll parameters
     initial_nn_params = np.hstack((initial_Theta1.ravel(), initial_Theta2.ravel()))
@@ -157,9 +157,56 @@ def rand_initialize_weights(input_layer, output_layer):
 
 def part7_implement_backpropagation(X, y, input_layer_size, hidden_layer_size, num_labels):
     print("Checking Backpropagation... ")
-
+    input_layer_size = 3
+    hidden_layer_size = 5
+    num_labels = 3
+    m = 5
+    Lambda = 1
+    nn_params = part2_loading_parameters(X, y)
+    Delta = backpropagation(nn_params, input_layer_size, hidden_layer_size, 
+                            num_labels, X, y, Lambda)
+    numDelta = computeNumericalGradient(nn_cost_function, nn_params,\
+                                       (input_layer_size, hidden_layer_size, num_labels, X, y, Lambda))
+    print(Delta, "\n", numDelta)
     #  Check gradients by running ckeck_nn_gradients
     ckeck_nn_gradients()
+
+def backpropagation(nn_params, input_layer_size, hidden_layer_size, 
+                    num_labels, X, y, Lambda):
+    Theta1 = np.reshape(nn_params[:hidden_layer_size*(input_layer_size+1),], (hidden_layer_size, input_layer_size+1)) # 25 * 401
+    Theta2 = np.reshape(nn_params[hidden_layer_size*(input_layer_size+1):,], (num_labels, hidden_layer_size+1)) # 10 * 26
+    m, _ = np.shape(X)
+    a1 = np.column_stack((np.ones((m, 1)), X))
+    z2 = a1.dot(Theta1.T)
+    a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
+    a3 = sigmoid(a2.dot(Theta2.T))
+    y_K = np.zeros((m, num_labels))
+    y_K[np.arange(m), y-1] = 1
+    #step4
+    delta3 = a3 - y_K
+    delta2 = delta3.dot(Theta2) * \
+            sigmoid_gradient(np.column_stack((np.ones((m,1)), z2)))
+    #step5
+    Delta2 = delta3.T.dot(a2)
+    Delta1 = delta2[:, 1:].T.dot(a1)
+    Delta2 = Delta2 / m
+    Delta1 = Delta1 / m 
+    Delta2[:, 1:] = Delta2[:, 1:] + Lambda*Theta2[:, 1:]/m
+    Delta1[:, 1:] = Delta1[:, 1:] + Lambda*Theta1[:, 1:]/m
+    Delta = np.concatenate((Delta1.flatten(), Delta2.flatten()))
+    return Delta
+
+def computeNumericalGradient(J, theta, args):
+    numgrad = np.zeros(np.size(theta))
+    perturb = np.zeros(np.size(theta))
+    epsilon = 1e-4
+    for i in range(np.size(theta)):
+        perturb[i] = epsilon
+        loss1, _ = J(theta-perturb, *args)
+        loss2, _ = J(theta+perturb, *args)
+        numgrad[i] = (loss2-loss1)/(2*epsilon)
+        perturb[i] = 0
+    return numgrad
 
 def ckeck_nn_gradients():
     epsilon_derivative = 1e-4
@@ -248,7 +295,7 @@ def main():
 
     data = scipy.io.loadmat('ex4data1.mat')
     X = data['X']
-    y = data['y']
+    y = data['y']  # y = [1, 2, ..., 9, 10]
     y = np.squeeze(y)
     ## Setup the parameters you will use for this exercise
     input_layer_size  = 400  # 20x20 Input Images of Digits
