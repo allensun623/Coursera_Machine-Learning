@@ -170,14 +170,14 @@ def checkNNGradients(lamb):
 
     x = debugInitWeights(m, input_layer_size-1)
     y = 1+(np.arange(m)+1) % num_labels
-
+    
     nn_params = np.concatenate((theta1.flatten(), theta2.flatten()))
+    
 
     cost, grad = nnCostFunc(nn_params, input_layer_size, hidden_layer_size, num_labels, x, y, lamb)
     numgrad = computeNumericalGradient(nnCostFunc, nn_params,\
                                        (input_layer_size, hidden_layer_size, num_labels, x, y, lamb))
     print(numgrad, '\n', grad)
-    print(np.shape(grad))
     print('The above two columns you get should be very similar.\n \
     (Left-Your Numerical Gradient, Right-Analytical Gradient)')
     diff = slin.norm(numgrad-grad)/slin.norm(numgrad+grad)
