@@ -86,7 +86,20 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     reg_cost = np.sum(Theta1[:, 1:]*Theta1[:, 1:]) +  np.sum(Theta2[:, 1:]*Theta2[:, 1:])
     J = -1 / m * (np.sum(y_K*np.log(a3) + (1-y_K)*(np.log(1-a3)))) + \
         Lambda / (2*m) * reg_cost
-    return J, a3
+
+    #step4
+    delta3 = a3 - y_K
+    delta2 = delta3.dot(Theta2) * \
+            sigmoid_gradient(np.column_stack((np.ones((m,1)), z2)))
+    #step5
+    Delta2 = delta3.T.dot(a2)
+    Delta1 = delta2[:, 1:].T.dot(a1)
+    Delta2 = Delta2 / m
+    Delta1 = Delta1 / m 
+    Delta2[:, 1:] = Delta2[:, 1:] + Lambda*Theta2[:, 1:]/m
+    Delta1[:, 1:] = Delta1[:, 1:] + Lambda*Theta1[:, 1:]/m
+    Delta = np.concatenate((Delta1.flatten(), Delta2.flatten()))
+    return J, Delta
 
 def sigmoid(z):
     g = 1/(1+np.exp(-z))
@@ -157,13 +170,9 @@ def rand_initialize_weights(input_layer, output_layer):
 
 def part7_implement_backpropagation(X, y, input_layer_size, hidden_layer_size, num_labels):
     print("Checking Backpropagation... ")
-    input_layer_size = 3
-    hidden_layer_size = 5
-    num_labels = 3
-    m = 5
     Lambda = 1
     nn_params = part2_loading_parameters(X, y)
-    Delta = backpropagation(nn_params, input_layer_size, hidden_layer_size, 
+    _, Delta = nn_cost_function(nn_params, input_layer_size, hidden_layer_size, 
                             num_labels, X, y, Lambda)
     numDelta = computeNumericalGradient(nn_cost_function, nn_params,\
                                        (input_layer_size, hidden_layer_size, num_labels, X, y, Lambda))
