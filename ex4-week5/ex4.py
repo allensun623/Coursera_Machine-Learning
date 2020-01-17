@@ -83,9 +83,9 @@ def nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
     z2 = a1.dot(Theta1.T)
     a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
     a3 = sigmoid(a2.dot(Theta2.T))
-    #forward propagation
     y_K = np.zeros((m, num_labels))
     y_K[np.arange(m), y-1] = 1
+    #forward propagation
     reg_cost = np.sum(Theta1[:, 1:]*Theta1[:, 1:]) +  np.sum(Theta2[:, 1:]*Theta2[:, 1:])
     J = -1/m*(np.sum(y_K*np.log(a3)+(1-y_K)*(np.log(1-a3)))) + \
         Lambda/(2*m) *reg_cost
@@ -273,60 +273,58 @@ def part8_training_NN(X, y, input_layer_size, hidden_layer_size, num_labels):
     #Theta2 = np.reshape(nn_params[hidden_layer_size * (input_layer_size + 1):],
     #                (num_labels, (hidden_layer_size + 1)), order='F').copy()
 
-    param = op.fmin_cg(nnCost, initial_nn_params, fprime=nnGrad, \
-                    args=(input_layer_size, hidden_layer_size, num_labels, X, y, Lambda), maxiter=50)
+    param = op.fmin_cg(nn_cost, initial_nn_params, fprime=nn_gradient, \
+                    args=(input_layer_size, hidden_layer_size, num_labels, X, y, Lambda), maxiter=400)
     theta1 = param[0: hidden_layer_size*(input_layer_size+1)].reshape(hidden_layer_size, input_layer_size+1)
     theta2 = param[hidden_layer_size*(input_layer_size+1):].reshape(num_labels, hidden_layer_size+1)
 
     return theta1, theta2
-# 损失函数
-def nnCost(params, input_layer_size, hidden_layer_size, num_labels, x, y, lamb):
-    theta1 = params[0:hidden_layer_size * (input_layer_size + 1)].reshape(hidden_layer_size, input_layer_size + 1)
-    theta2 = params[hidden_layer_size * (input_layer_size + 1):].reshape(num_labels, hidden_layer_size + 1)
-    m = np.size(x, 0)
 
-    # 前向传播 --- 下标：0代表1， 9代表10
-    a1 = np.concatenate((np.ones((m, 1)), x), axis=1)
-    z2 = a1.dot(theta1.T);
-    l2 = np.size(z2, 0)
-    a2 = np.concatenate((np.ones((l2, 1)), sigmoid(z2)), axis=1)
-    z3 = a2.dot(theta2.T)
-    a3 = sigmoid(z3)
-    yt = np.zeros((m, num_labels))
-    yt[np.arange(m), y - 1] = 1
-    j = np.sum(-yt * np.log(a3) - (1 - yt) * np.log(1 - a3))
-    # 向后传播
-    j = j / m
-    reg_cost = np.sum(np.power(theta1[:, 1:], 2)) + np.sum(np.power(theta2[:, 1:], 2))
-    j = j + 1 / (2 * m) * lamb * reg_cost
-    return j
 
-def nnGrad(params, input_layer_size, hidden_layer_size, num_labels, x, y, lamb):
-    theta1 = params[0:hidden_layer_size * (input_layer_size + 1)].reshape(hidden_layer_size, input_layer_size + 1)
-    theta2 = params[(hidden_layer_size * (input_layer_size + 1)):].reshape(num_labels, hidden_layer_size + 1)
-    m = np.size(x, 0)
-    # 前向传播 --- 下标：0代表1， 9代表10
-    a1 = np.concatenate((np.ones((m, 1)), x), axis=1)
-    z2 = a1.dot(theta1.T);
-    l2 = np.size(z2, 0)
-    a2 = np.concatenate((np.ones((l2, 1)), sigmoid(z2)), axis=1)
-    z3 = a2.dot(theta2.T)
-    a3 = sigmoid(z3)
-    yt = np.zeros((m, num_labels))
-    yt[np.arange(m), y - 1] = 1
-    # 向后传播
-    delta3 = a3 - yt
-    delta2 = delta3.dot(theta2) * sigmoid_gradient(np.concatenate((np.ones((l2, 1)), z2), axis=1))
-    theta2_grad = delta3.T.dot(a2)
-    theta1_grad = delta2[:, 1:].T.dot(a1)
+def nn_cost(nn_params, input_layer_size, hidden_layer_size,
+        num_labels, X, y, Lambda):
+    Theta1 = np.reshape(nn_params[:hidden_layer_size*(input_layer_size+1),], (hidden_layer_size, input_layer_size+1)) # 25 * 401
+    Theta2 = np.reshape(nn_params[hidden_layer_size*(input_layer_size+1):,], (num_labels, hidden_layer_size+1)) # 10 * 26
+    m, _ = np.shape(X)
+    a1 = np.column_stack((np.ones((m, 1)), X))
+    z2 = a1.dot(Theta1.T)
+    a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
+    a3 = sigmoid(a2.dot(Theta2.T))
+    y_K = np.zeros((m, num_labels))
+    y_K[np.arange(m), y-1] = 1
+    
+    #forward propagation
+    reg_cost = np.sum(Theta1[:, 1:]*Theta1[:, 1:]) +  np.sum(Theta2[:, 1:]*Theta2[:, 1:])
+    J = -1/m*(np.sum(y_K*np.log(a3)+(1-y_K)*(np.log(1-a3)))) + \
+        Lambda/(2*m) *reg_cost
+    return J
 
-    theta2_grad = theta2_grad / m
-    theta2_grad[:, 1:] = theta2_grad[:, 1:] + lamb / m * theta2[:, 1:]
-    theta1_grad = theta1_grad / m
-    theta1_grad[:, 1:] = theta1_grad[:, 1:] + lamb / m * theta1[:, 1:]
+def nn_gradient(nn_params, input_layer_size, hidden_layer_size,
+        num_labels, X, y, Lambda):
+    Theta1 = np.reshape(nn_params[:hidden_layer_size*(input_layer_size+1),], (hidden_layer_size, input_layer_size+1)) # 25 * 401
+    Theta2 = np.reshape(nn_params[hidden_layer_size*(input_layer_size+1):,], (num_labels, hidden_layer_size+1)) # 10 * 26
+    m, _ = np.shape(X)
+    a1 = np.column_stack((np.ones((m, 1)), X))
+    z2 = a1.dot(Theta1.T)
+    a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
+    a3 = sigmoid(a2.dot(Theta2.T))
+    y_K = np.zeros((m, num_labels))
+    y_K[np.arange(m), y-1] = 1
 
-    grad = np.concatenate((theta1_grad.flatten(), theta2_grad.flatten()))
-    return grad
+    #backpropagation
+    #step4
+    delta3 = a3 - y_K
+    delta2 = delta3.dot(Theta2) * \
+            sigmoid_gradient(np.column_stack((np.ones((m,1)), z2)))
+    #step5
+    Delta2 = delta3.T.dot(a2)
+    Delta1 = delta2[:, 1:].T.dot(a1)
+    Delta2 = Delta2 / m
+    Delta1 = Delta1 / m 
+    Delta2[:, 1:] = Delta2[:, 1:] + Lambda*Theta2[:, 1:]/m
+    Delta1[:, 1:] = Delta1[:, 1:] + Lambda*Theta1[:, 1:]/m
+    Delta = np.concatenate((Delta1.flatten(), Delta2.flatten()))
+    return Delta
 
 ## ================= Part 9: Visualize Weights =================
 #  You can now "visualize" what the neural network is learning by 
