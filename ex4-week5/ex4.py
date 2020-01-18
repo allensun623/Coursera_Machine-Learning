@@ -242,7 +242,6 @@ def check_nn_gradients(Lambda):
          the relative difference will be small (less than 1e-9). \n\
          \nRelative Difference: ', diff)
 
-
 ## =================== Part 8: Training NN ===================
 #  You have now implemented all the code necessary to train a neural 
 #  network. To train your neural network, we will now use "fmincg", which
@@ -261,70 +260,16 @@ def part8_training_NN(X, y, input_layer_size, hidden_layer_size, num_labels):
     #  You should also try different values of lambda
     Lambda = 1
     initial_nn_params = part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels)
-    #costFunc = lambda p: nn_cost_function(p, input_layer_size, hidden_layer_size, num_labels, X, y, Lambda)[0]
-    #gradFunc = lambda p: nn_cost_function(p, input_layer_size, hidden_layer_size, num_labels, X, y, Lambda)[1]
+    cost_func = lambda p: nn_cost_function(p, input_layer_size, hidden_layer_size, num_labels, X, y, Lambda)[0]
+    grad_func = lambda p: nn_cost_function(p, input_layer_size, hidden_layer_size, num_labels, X, y, Lambda)[1]
 
-    #result = minimize(nnCost, initial_nn_params, method='CG', jac=gradFunc, options={'disp': True, 'maxiter': 50.0})
-    #nn_params = result.x
-    #cost = result.fun
-        # Obtain Theta1 and Theta2 back from nn_params
-    #Theta1 = np.reshape(nn_params[:hidden_layer_size * (input_layer_size + 1)],
-    #                (hidden_layer_size, input_layer_size + 1), order='F').copy()
-    #Theta2 = np.reshape(nn_params[hidden_layer_size * (input_layer_size + 1):],
-    #                (num_labels, (hidden_layer_size + 1)), order='F').copy()
-
-    param = op.fmin_cg(nn_cost, initial_nn_params, fprime=nn_gradient, \
-                    args=(input_layer_size, hidden_layer_size, num_labels, X, y, Lambda), maxiter=400)
-    theta1 = param[0: hidden_layer_size*(input_layer_size+1)].reshape(hidden_layer_size, input_layer_size+1)
-    theta2 = param[hidden_layer_size*(input_layer_size+1):].reshape(num_labels, hidden_layer_size+1)
+    result = minimize(cost_func, initial_nn_params, method='CG', jac=grad_func, options={'disp': True, 'maxiter': 50.0})
+    nn_params = result.x
+    Jcost = result.fun
+    theta1 = nn_params[0: hidden_layer_size*(input_layer_size+1)].reshape(hidden_layer_size, input_layer_size+1)
+    theta2 = nn_params[hidden_layer_size*(input_layer_size+1):].reshape(num_labels, hidden_layer_size+1)
 
     return theta1, theta2
-
-
-def nn_cost(nn_params, input_layer_size, hidden_layer_size,
-        num_labels, X, y, Lambda):
-    Theta1 = np.reshape(nn_params[:hidden_layer_size*(input_layer_size+1),], (hidden_layer_size, input_layer_size+1)) # 25 * 401
-    Theta2 = np.reshape(nn_params[hidden_layer_size*(input_layer_size+1):,], (num_labels, hidden_layer_size+1)) # 10 * 26
-    m, _ = np.shape(X)
-    a1 = np.column_stack((np.ones((m, 1)), X))
-    z2 = a1.dot(Theta1.T)
-    a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
-    a3 = sigmoid(a2.dot(Theta2.T))
-    y_K = np.zeros((m, num_labels))
-    y_K[np.arange(m), y-1] = 1
-    
-    #forward propagation
-    reg_cost = np.sum(Theta1[:, 1:]*Theta1[:, 1:]) +  np.sum(Theta2[:, 1:]*Theta2[:, 1:])
-    J = -1/m*(np.sum(y_K*np.log(a3)+(1-y_K)*(np.log(1-a3)))) + \
-        Lambda/(2*m) *reg_cost
-    return J
-
-def nn_gradient(nn_params, input_layer_size, hidden_layer_size,
-        num_labels, X, y, Lambda):
-    Theta1 = np.reshape(nn_params[:hidden_layer_size*(input_layer_size+1),], (hidden_layer_size, input_layer_size+1)) # 25 * 401
-    Theta2 = np.reshape(nn_params[hidden_layer_size*(input_layer_size+1):,], (num_labels, hidden_layer_size+1)) # 10 * 26
-    m, _ = np.shape(X)
-    a1 = np.column_stack((np.ones((m, 1)), X))
-    z2 = a1.dot(Theta1.T)
-    a2 = np.column_stack((np.ones((m, 1)), sigmoid(z2)))
-    a3 = sigmoid(a2.dot(Theta2.T))
-    y_K = np.zeros((m, num_labels))
-    y_K[np.arange(m), y-1] = 1
-
-    #backpropagation
-    #step4
-    delta3 = a3 - y_K
-    delta2 = delta3.dot(Theta2) * \
-            sigmoid_gradient(np.column_stack((np.ones((m,1)), z2)))
-    #step5
-    Delta2 = delta3.T.dot(a2)
-    Delta1 = delta2[:, 1:].T.dot(a1)
-    Delta2 = Delta2 / m
-    Delta1 = Delta1 / m 
-    Delta2[:, 1:] = Delta2[:, 1:] + Lambda*Theta2[:, 1:]/m
-    Delta1[:, 1:] = Delta1[:, 1:] + Lambda*Theta1[:, 1:]/m
-    Delta = np.concatenate((Delta1.flatten(), Delta2.flatten()))
-    return Delta
 
 ## ================= Part 9: Visualize Weights =================
 #  You can now "visualize" what the neural network is learning by 
@@ -334,7 +279,6 @@ def nn_gradient(nn_params, input_layer_size, hidden_layer_size,
 def part9_visualize_weight(X, y, input_layer_size, hidden_layer_size, num_labels):
 
     print("Visualizing Neural Network... ")
-
     Theta1, Theta2 = part8_training_NN(X, y, input_layer_size, hidden_layer_size, num_labels)
     display.display_data(Theta1[:, 1:], X)
 
@@ -361,6 +305,22 @@ def predict(Theta1, Theta2, X):
     pred = np.argmax(a3, axis=1) + 1
     return pred
 
+#The fundamental iteration algrithm
+def iteration(X, y, input_layer_size, hidden_layer_size, num_labels):
+    initial_nn_params = part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels)
+    __iteration = 2000
+    Lambda = 1.0
+    nn_params = initial_nn_params
+    for _ in range(__iteration):
+        J, grad = nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
+                                num_labels, X, y, Lambda)
+        nn_params = nn_params - grad
+    Theta1 = nn_params[: hidden_layer_size*(input_layer_size+1),].reshape(hidden_layer_size, input_layer_size+1)
+    Theta2 = nn_params[hidden_layer_size*(input_layer_size+1):,].reshape(num_labels, hidden_layer_size+1)
+    pred = predict(Theta1, Theta2, X)
+    accuracy = np.mean(np.double(pred == y)) * 100
+    print("Current function value: %f\n"% J)
+    print("Training Set Accuracy: %f\n"% accuracy)
 
 def main():
         # Load Training Data
@@ -386,7 +346,7 @@ def main():
     #part8_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels)
     #part9_visualize_weight(X, y, input_layer_size, hidden_layer_size, num_labels)
     part10_implement_predict(X, y, input_layer_size, hidden_layer_size, num_labels)
-
+    iteration(X, y, input_layer_size, hidden_layer_size, num_labels)
 
 if __name__ == "__main__":
     main()
