@@ -311,10 +311,11 @@ def iteration(X, y, input_layer_size, hidden_layer_size, num_labels):
     __iteration = 2000
     Lambda = 1.0
     nn_params = initial_nn_params
+    alpha = 2.0
     for _ in range(__iteration):
         J, grad = nn_cost_function(nn_params, input_layer_size, hidden_layer_size,
                                 num_labels, X, y, Lambda)
-        nn_params = nn_params - grad #delta gradients
+        nn_params = nn_params - alpha*grad #delta gradients
     Theta1 = nn_params[: hidden_layer_size*(input_layer_size+1),].reshape(hidden_layer_size, input_layer_size+1)
     Theta2 = nn_params[hidden_layer_size*(input_layer_size+1):,].reshape(num_labels, hidden_layer_size+1)
     pred = predict(Theta1, Theta2, X)
