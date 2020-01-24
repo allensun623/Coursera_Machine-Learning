@@ -23,6 +23,7 @@ import string
 import re
 import pysnooper
 import timeit
+from nltk.stem import PorterStemmer
 
 ## ==================== Part 1: Email Preprocessing ====================
 #  To use an SVM to classify emails into Spam v.s. Non-Spam, you first need
@@ -44,26 +45,39 @@ def part1_email_preprocessing():
     print(word_indices)
 
 def process_email(file_contents):
+    print(file_contents)
     lowercase = file_contents.lower()
     start0 = timeit.timeit()
-    words = ' '.join([filter(item) for item in lowercase.split()])
-    remove_punctuation = words.translate(str.maketrans('', '', string.punctuation))
-    remove_numb = ''.join([i for i in remove_punctuation if not i.isdigit()])
-    print(remove_numb)
+    words = [filter(item) for item in lowercase.split() if filter(item)]
+    #remove_punctuation = words.translate(str.maketrans('', '', string.punctuation))
+    #remove_numb = ''.join([i for i in remove_punctuation if not i.isdigit()])
+    print(words)
     word_indices = ''
     end0 = timeit.timeit()
     print(end0 - start0)
     return word_indices
 
 def filter(item):
+    item = PorterStemmer().stem(item)
+    item = ''.join('dollar' if i == '$' else i for i in item)
+    #replace numbers with 'numb'
+    digit_boolean = any(char.isdigit() for char in item)
+    item = ''.join([i for i in item if not i.isdigit()])
+    if digit_boolean:
+        item = item + 'numb'
+    #relace @
     if '@' in item:
         return 'emailaddr'
+    #relace URL
     elif 'http://' in item:
         return 'httpaddr'
+    #relace $
     elif '$' == item:
         return 'dollar'
+    elif item in string.punctuation:
+        return False
     else:
-        return item
+        return ''.join([i for i in item.translate(str.maketrans('', '', string.punctuation))])
 
 
 ## ==================== Part 2: Feature Extraction ====================
