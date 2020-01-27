@@ -47,24 +47,18 @@ def part1_email_preprocessing():
 def process_email(file_contents):
     print(file_contents)
     lowercase = file_contents.lower()
-    start0 = timeit.timeit()
     words = [filter(item) for item in lowercase.split() if filter(item)]
-    #remove_punctuation = words.translate(str.maketrans('', '', string.punctuation))
-    #remove_numb = ''.join([i for i in remove_punctuation if not i.isdigit()])
     print(words)
-    word_indices = ''
-    end0 = timeit.timeit()
-    print(end0 - start0)
+    #get vocabulary list
+    vocab_str = open('vocab.txt', 'r').readlines()
+    vocab_list = [''.join([i for i in item.replace('\t', '').replace('\n', '') if not i.isdigit()]) for item in vocab_str]
+    #index
+    word_indices = [i+1 for word in words for i, s in enumerate(vocab_list) if word == s]
+    print(word_indices)
     return word_indices
 
+
 def filter(item):
-    item = PorterStemmer().stem(item)
-    item = ''.join('dollar' if i == '$' else i for i in item)
-    #replace numbers with 'numb'
-    digit_boolean = any(char.isdigit() for char in item)
-    item = ''.join([i for i in item if not i.isdigit()])
-    if digit_boolean:
-        item = item + 'numb'
     #relace @
     if '@' in item:
         return 'emailaddr'
@@ -77,6 +71,16 @@ def filter(item):
     elif item in string.punctuation:
         return False
     else:
+        item = PorterStemmer().stem(item)
+        item = ''.join('dollar' if i == '$' else i for i in item)
+        #replace numbers with 'numb'
+        digit_boolean = any(char.isdigit() for char in item)
+        item = ''.join([i for i in item if not i.isdigit()])
+        if digit_boolean:
+            if item != '': 
+                item = item + 'numb'
+            else:
+                item = 'number'
         return ''.join([i for i in item.translate(str.maketrans('', '', string.punctuation))])
 
 
@@ -90,12 +94,19 @@ def part2_feature_extraction():
     # Extract Features
     file = open('emailSample1.txt')
     file_contents = file.readlines()
-    word_indices = processEmail(''.join(file_contents))
-    features = emailFeatures(word_indices)
+    word_indices = process_email(''.join(file_contents))
+    features = email_features(word_indices)
 
     # Print Stats
     print("Length of feature vector: %d"% features.size)
     print("Number of non-zero entries: %d"% sum(features > 0))
+
+def email_features(word_indices):
+    v_length = 1899
+    v = np.zeros((v_length, 1))
+    for index in word_indices:
+        v[index-1] = 1
+    return v
 
 ## =========== Part 3: Train Linear SVM for Spam Classification ========
 #  In this section, you will train a linear classifier to determine if an
@@ -117,12 +128,14 @@ def part3_train_linear_SVM_for_spam_classification():
     p = model.predict(X)
 
     print("Training Accuracy: %f", np.mean(np.double(p == y)) * 100)
+    return model
 
 ## =================== Part 4: Test Spam Classification ================
 #  After training the classifier, we can evaluate it on a test set. We have
 #  included a test set in spamTest.mat
 
 def part4_test_spam_classification():
+    model = part3_train_linear_SVM_for_spam_classification()
     # Load the test dataset
     # You will have Xtest, ytest in your environment
     data = scipy.io.loadmat('spamTest.mat')
@@ -145,18 +158,36 @@ def part4_test_spam_classification():
 #
 def part5_top_predictors_of_spam():
     # Sort the weights and obtain the vocabulary list
+    model = part3_train_linear_SVM_for_spam_classification()
 
     t = sorted(list(enumerate(model.coef_[0])),key=lambda e: e[1], reverse=True)
     d = OrderedDict(t)
-    idx = d.keys()
-    weight = d.values()
+    idx = (list(d.keys())[0])
+    weight = (list(d.values())[1])
     vocabList = getVocabList()
+    print(idx)
+    print(weight)
 
     print("Top predictors of spam: ")
     for i in range(15):
         print(" %-15s (%f)" %(vocabList[idx[i]], weight[i]))
 
     print("Program paused. Press enter to continue.")
+
+def getVocabList():
+
+    """reads the fixed vocabulary list in vocab.txt
+    and returns a cell array of the words in vocabList.
+    """
+
+## Read the fixed vocabulary list
+    with open('vocab.txt') as f:
+        vocabList = []
+        for line in f:
+            idx, w = line.split()
+            vocabList.append(w)
+
+    return vocabList
 
 ## =================== Part 6: Try Your Own Emails =====================
 #  Now that you've trained the spam classifier, you can use it on your own
@@ -173,11 +204,12 @@ def part6_try_your_own_emails():
     filename = 'spamSample1.txt'
 
     # Read and predict
+    model = part3_train_linear_SVM_for_spam_classification()
 
     file = open(filename)
     file_contents = file.readlines()
-    word_indices = processEmail(''.join(file_contents))
-    x = emailFeatures(word_indices)
+    word_indices = process_email(''.join(file_contents))
+    x = email_features(word_indices)
     p = model.predict(x)
 
     print("Processed %s\n\nSpam Classification: %d" % (filename, p))
@@ -185,7 +217,12 @@ def part6_try_your_own_emails():
 
 
 def main():
-    part1_email_preprocessing()
+    #part1_email_preprocessing()
+    #part2_feature_extraction()
+    #part3_train_linear_SVM_for_spam_classification()
+    #part4_test_spam_classification()
+    #part5_top_predictors_of_spam()
+    part6_try_your_own_emails()
 
 if __name__ == "__main__":
     main()
