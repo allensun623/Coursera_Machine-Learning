@@ -106,7 +106,7 @@ def email_features(word_indices):
     v = np.zeros((v_length, 1))
     for index in word_indices:
         v[index-1] = 1
-    return v
+    return v.T
 
 ## =========== Part 3: Train Linear SVM for Spam Classification ========
 #  In this section, you will train a linear classifier to determine if an
@@ -122,7 +122,7 @@ def part3_train_linear_SVM_for_spam_classification():
     print("(this may take 1 to 2 minutes) ...")
 
     C = 0.1
-    clf = svm.SVC(C=C, kernel='linear', tol=1e-3, max_iter=200)
+    clf = svm.SVC(C=C, kernel='linear', tol=1e-3, max_iter=500)
     model = clf.fit(X, y)
 
     p = model.predict(X)
@@ -201,12 +201,12 @@ def part6_try_your_own_emails():
     # Set the file to be read in (change this to spamSample2.txt,
     # emailSample1.txt or emailSample2.txt to see different predictions on
     # different emails types). Try your own emails as well!
-    filename = 'spamSample1.txt'
+    filename = 'myTest.txt'
 
     # Read and predict
     model = part3_train_linear_SVM_for_spam_classification()
 
-    file = open(filename)
+    file = open(filename, 'r')
     file_contents = file.readlines()
     word_indices = process_email(''.join(file_contents))
     x = email_features(word_indices)
