@@ -220,9 +220,9 @@ def main():
     #part1_email_preprocessing()
     #part2_feature_extraction()
     #part3_train_linear_SVM_for_spam_classification()
-    #part4_test_spam_classification()
-    #part5_top_predictors_of_spam()
-    part6_try_your_own_emails()
+    part4_test_spam_classification()
+    part5_top_predictors_of_spam()
+    #part6_try_your_own_emails()
 
 if __name__ == "__main__":
     main()
