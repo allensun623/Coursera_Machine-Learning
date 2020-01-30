@@ -30,3 +30,6 @@ Notes and exercises
 - `ex7.py` K-means Clustering and Principal Component Analysis
 - `ex7_pca.py`Use principal component analysis to find a low-dimensional representation of face images
 
+**ex8-week9**
+- `ex8.py` Implement the anomaly detection algorithm and apply it to detect failing servers on a network
+- Use collaborative filtering to build a recommender system for movies
