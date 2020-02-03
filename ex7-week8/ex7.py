@@ -209,9 +209,9 @@ def part5_image_compression():
 def main():
     #part1_find_closest_centroids()    
     #part2_compute_means()
-    #part3_kMeans_clustering()
+    part3_kMeans_clustering()
     #part4_kMeans_clustering_on_pixels()
-    part5_image_compression()
+    #part5_image_compression()
 
 if __name__ == "__main__":
     main()
