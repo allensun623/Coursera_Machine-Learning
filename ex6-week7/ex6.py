@@ -1,20 +1,6 @@
 ## Machine Learning Online Class
 #  Exercise 6 | Support Vector Machines
 #
-#  Instructions
-#  ------------
-# 
-#  This file contains code that helps you get started on the
-#  exercise. You will need to complete the following functions:
-#
-#     gaussianKernel.m
-#     dataset3Params.m
-#     processEmail.m
-#     emailFeatures.m
-#
-#  For this exercise, you will not need to change any code in this file,
-#  or any other files other than those mentioned above.
-#
 from matplotlib import use, cm
 use('TkAgg')
 import numpy as np
@@ -200,7 +186,7 @@ def part7_training_SVM_with_RBF_Kernel_dataset3():
     yval = data['yval'].flatten()
     # Try different SVM Parameters here
     C, sigma = dataset3_params(X, y, Xval, yval)
-    gamma = 1.0 / (2.0 * sigma ** 2)
+    gamma = 1.0 / (2.0*sigma**2)
     # Train the SVM
 
     clf = svm.SVC(C=C, kernel='rbf', tol=1e-3, gamma=gamma)

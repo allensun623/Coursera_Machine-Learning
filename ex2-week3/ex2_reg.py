@@ -63,6 +63,7 @@ def cost_function_reg(theta, X, y, Lambda):
     h = sigmoid(X.dot(theta))
     J = -1 / m * (y.T.dot(np.log(h)) + (1-y).T.dot(np.log(1-h))) + Lambda/2/m*theta.T.dot(theta)
     return J
+    
 def gradient_function_reg(theta, X, y, Lambda):
     m, n =  X.shape
     h = sigmoid(X.dot(theta))

@@ -62,8 +62,8 @@ def multivariate_gaussian(X, mu, sigma2):
     sigma2_diag = np.diag(sigma2)
     #print(sigma2_diag)
     #print(np.linalg.det(sigma2_diag))
-    p = (2 * np.pi) ** (- k / 2) * np.linalg.det(sigma2_diag) ** (-0.5) * \
-        np.prod(np.exp(-((X-mu)*(X-mu)).dot(np.diag(1/np.sqrt(2*sigma2)))), axis=1)*(1/np.sqrt(2*math.pi*np.linalg.det(sigma2_diag)))
+    p = (2*np.pi) ** (-k/2) * np.linalg.det(sigma2_diag) ** (-0.5) * \
+        np.prod(np.exp(-((X-mu)**2.dot(np.diag(1/np.sqrt(2*sigma2)))), axis=1)*(1/np.sqrt(2*math.pi*np.linalg.det(sigma2_diag)))
     #print("=============")
     #print(1/np.sqrt(2*math.pi*np.linalg.det(sigma2_diag)))
     #print(1/(((2*math.pi)*la.det(sigma2_diag))**(0.5)))
