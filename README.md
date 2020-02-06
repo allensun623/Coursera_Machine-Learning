@@ -6,16 +6,16 @@ Notes and exercises
 |:--:|:--:|
 |Supervised Learning|Unsupervised Learning|
 
-### Summary of Machine Learning
-|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Summary_Machine-Learning.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Content.png" alt="Illustration" width="400px"/></a>|
+#### Summary of Machine Learning
+|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Summary_Machine-Learning.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Content.png" alt="Illustration" width="400px"/></a>|
 |:--:|
 |Summary of Machine Learning|
 
 ## Exercises
-**ex1-week2**
+[**ex1-week2**](https://github.com/AllenSun7/CS229_Machine-Learning/tree/master/ex1-week2)
 - Linear Regression
 
-**ex2-week3**
+**[ex2-week3](https://github.com/AllenSun7/CS229_Machine-Learning/tree/master/ex2-week3)**
 - Logistic Regression
 - Implement logistic regression and apply it to two different datasets.
 
@@ -43,3 +43,8 @@ Notes and exercises
 **ex8-week9**
 - `ex8.py` Implement the anomaly detection algorithm and apply it to detect failing servers on a network
 - `ex8_cofi.py` Use collaborative filtering to build a recommender system for movies
+
+### Reference
+@afshinea / [stanford-cs-229-machine-learning](https://github.com/afshinea/stanford-cs-229-machine-learning/blob/master/en/super-cheatsheet-machine-learning.pdf).
+@mstampfer / [Coursera-Stanford-ML-Python](https://github.com/mstampfer/Coursera-Stanford-ML-Python/tree/master/ex8).
+@AceCoooool / [ML-Andrew-Ng](https://github.com/AceCoooool/ML-Andrew-Ng).
