@@ -1,5 +1,7 @@
 # Coursera/Stanford Machine Learning course
-Notes and exercises
+Coursera/[Stanford Machine Learning course](https://www.coursera.org/learn/machine-learning) 
+Notes and exercises in Python
+
 ## Summary
 ####  Algorithm Cheatsheet
 |<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm-Supervised1.png" alt="Illustration" width="300px"/></a>|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm-Unsupervised1.png" alt="Illustration" width="300px"/></a>|
@@ -12,6 +14,8 @@ Notes and exercises
 |Summary of Machine Learning|
 
 ## Exercises
+Assignments for Andrew Ng's Machine Learning course implemented in Python without solutions.
+
 **[ex1-week2](https://github.com/AllenSun7/CS229_Machine-Learning/tree/master/ex1-week2)**
 - Linear Regression
 
@@ -44,7 +48,7 @@ Notes and exercises
 - `ex8.py` Implement the anomaly detection algorithm and apply it to detect failing servers on a network
 - `ex8_cofi.py` Use collaborative filtering to build a recommender system for movies
 
-### Reference & Appreciation
+## Reference & Appreciation
 - @afshinea / [stanford-cs-229-machine-learning](https://github.com/afshinea/stanford-cs-229-machine-learning).
 - @mstampfer / [Coursera-Stanford-ML-Python](https://github.com/mstampfer/Coursera-Stanford-ML-Python).
 - @AceCoooool / [ML-Andrew-Ng](https://github.com/AceCoooool/ML-Andrew-Ng).
