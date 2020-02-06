@@ -1,7 +1,7 @@
 # Coursera/Stanford Machine Learning course
 Notes and exercises
 ## Algorithm Cheatsheet
-|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Summary_Machine-Learning-algorithm.pdf"><img src="https://stanford.edu/~shervine/teaching/cs-229/illustrations/cover/en-007.png" alt="Illustration" width="400px"/></a>|
+|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Summary_Machine-Learning-algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Summary_Machine-Learning-algorithm.png" alt="Illustration" width="400px"/></a>|
 
 ## Exercises
 **ex1-week2**
