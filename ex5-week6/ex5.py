@@ -7,20 +7,6 @@ import pysnooper
 
 ## Machine Learning Online Class
 #  Exercise 5 | Regularized Linear Regression and Bias-Variance
-#
-#  Instructions
-#  ------------
-# 
-#  This file contains code that helps you get started on the
-#  exercise. You will need to complete the following functions:
-#
-#     linear_reg_cost_func.m
-#     learningCurve.m
-#     validationCurve.m
-#
-#  For this exercise, you will not need to change any code in this file,
-#  or any other files other than those mentioned above.
-#
 
 ## =========== Part 1: Loading and Visualizing Data =============
 #  We start the exercise by first loading and visualizing the dataset. 

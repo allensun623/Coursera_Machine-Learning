@@ -220,11 +220,11 @@ def dataset3_params(X, y, Xval, yval):
 
 def main():
     #part1_loading_and_visualizing_data()
-    #part2_training_linear_SVM()
-    #part3_implementing_Gaussian_Kernel()
-    #part4_visualizing_dataset2()
-    #part5_training_SVM_with_RBF_Kernel_dataset2()
-    #part6_visualizing_dataset3()
+    part2_training_linear_SVM()
+    part3_implementing_Gaussian_Kernel()
+    part4_visualizing_dataset2()
+    part5_training_SVM_with_RBF_Kernel_dataset2()
+    part6_visualizing_dataset3()
     part7_training_SVM_with_RBF_Kernel_dataset3()
 
 if __name__ == "__main__":

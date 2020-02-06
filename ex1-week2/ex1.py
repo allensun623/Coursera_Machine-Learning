@@ -8,25 +8,6 @@ import pysnooper
 
 ## Machine Learning Online Class - Exercise 1: Linear Regression
 
-#  Instructions
-#  ------------
-#
-#  This file contains code that helps you get started on the
-#  linear exercise. You will need to complete the following functions
-#  in this exericse:
-#
-#     warmUpExercise
-#     plotData
-#     gradientDescent
-#     computeCost
-#     gradientDescentMulti
-#     computeCostMulti
-#     featureNormalize
-#     normalEqn
-#
-#  For this exercise, you will not need to change any code in this file,
-#  or any other files other than those mentioned above.
-#
 # x refers to the population size in 10,000s
 # y refers to the profit in $10,000s
 
@@ -44,7 +25,7 @@ def warmUpExercise(vector_dimention):
 
     # ======================= Part 2: Plotting =======================
 def part2_Plotting():
-    data = np.loadtxt('ex1data1_test.txt', delimiter=',')
+    data = np.loadtxt('ex1data1.txt', delimiter=',')
     # Plot Data
     # Note: You have to complete the code in plotData()
     print("Plotting Data ...")
@@ -198,9 +179,9 @@ def part4_VisualizingJ():
 
 
 def main():
-    #part1_BasicFunction()
-    #part2_Plotting()
+    part1_BasicFunction()
+    part2_Plotting()
     part3_GradientDecent()
-    #part4_VisualizingJ()
+    part4_VisualizingJ()
 if __name__ == "__main__":
     main()

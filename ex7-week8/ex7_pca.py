@@ -294,9 +294,9 @@ def k_value_compute(X_norm, X_rec):
 
 def main():
     #part1_load_example_dataset()
-    #part2_principal_component_analysis()
-    #part3_dimension_reduction()
-    #part5_PCA_on_face_data_eigenfaces()
+    part2_principal_component_analysis()
+    part3_dimension_reduction()
+    part5_PCA_on_face_data_eigenfaces()
     part7_visualization_of_faces_after_PCA_dimension_reduction()
     #part_8_b()
 

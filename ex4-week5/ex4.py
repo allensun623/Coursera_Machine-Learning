@@ -1,20 +1,5 @@
 ## Machine Learning Online Class - Exercise 4 Neural Network Learning
 
-#  Instructions
-#  ------------
-# 
-#  This file contains code that helps you get started on the
-#  linear exercise. You will need to complete the following functions 
-#  in this exericse:
-#
-#     sigmoidGradient.m
-#     randInitializeWeights.m
-#     nnCostFunction.m
-#
-#  For this exercise, you will not need to change any code in this file,
-#  or any other files other than those mentioned above.
-#
-
 import numpy as np
 import scipy.io
 import scipy.linalg as slin
@@ -337,15 +322,15 @@ def main():
     num_labels = 10          # 10 labels, from 1 to 10   
                             # (note that we have mapped "0" to label 10)
 
-    #part1_loading_and_visualizing_data(X, y)
-    #part2_loading_parameters(X, y)
-    #part3_compute_cost(X, y, input_layer_size, hidden_layer_size, num_labels)
-    #part4_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels)
-    #part5_sigmoid_gradient(X, y)
-    #part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels)
-    #part7_implement_backpropagation(X, y, input_layer_size, hidden_layer_size, num_labels)
-    #part8_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels)
-    #part9_visualize_weight(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part1_loading_and_visualizing_data(X, y)
+    part2_loading_parameters(X, y)
+    part3_compute_cost(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part4_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part5_sigmoid_gradient(X, y)
+    part6_initializing_pameters(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part7_implement_backpropagation(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part8_implement_regularization(X, y, input_layer_size, hidden_layer_size, num_labels)
+    part9_visualize_weight(X, y, input_layer_size, hidden_layer_size, num_labels)
     part10_implement_predict(X, y, input_layer_size, hidden_layer_size, num_labels)
     iteration(X, y, input_layer_size, hidden_layer_size, num_labels)
 

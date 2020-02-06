@@ -9,34 +9,9 @@ from scipy.optimize import minimize
 
 ## Machine Learning Online Class - Exercise 2: Logistic Regression
 #
-#  Instructions
-#  ------------
-#
-#  This file contains code that helps you get started on the second part
-#  of the exercise which covers regularization with logistic regression.
-#
-#  You will need to complete the following functions in this exericse:
-#
-#     sigmoid.py
-#     costFunction.py
-#     gradientFunction.py
-#     predict.py
-#     costFunctionReg.py
-#     gradientFunctionReg.py
-#     n.b. This files differ in number from the Octave version of ex2.
-#          This is due to the scipy optimization taking only scalar
-#          functions where fmiunc in Octave takes functions returning
-#          multiple values.
-#
-#  For this exercise, you will not need to change any code in this file,
-#  or any other files other than those mentioned above.
-#
-
 # Load Data
 #  The first two columns contains the exam scores and the third column
 #  contains the label.
-
-
 
     # ==================== Part 1: Plotting ====================
 def part1_plotting(X, y ):

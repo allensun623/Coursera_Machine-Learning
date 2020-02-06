@@ -165,8 +165,8 @@ def normalEqn(X, y):
 # ============================================================
 
 def main():
-    #part1_FeatureNormalization()
-    #part2_GradientDescent()
+    part1_FeatureNormalization()
+    part2_GradientDescent()
     part3_NormalEquations()
 
 if __name__ == "__main__":
