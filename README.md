@@ -1,6 +1,6 @@
 # Coursera/Stanford Machine Learning course
-Coursera/[Stanford Machine Learning course](https://www.coursera.org/learn/machine-learning) 
-Notes and exercises in Python
+Coursera/[Stanford Machine Learning course](https://www.coursera.org/learn/machine-learning). 
+Notes and exercises implemented in Python
 
 ## Summary
 ####  Algorithm Cheatsheet
