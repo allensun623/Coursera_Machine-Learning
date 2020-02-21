@@ -4,12 +4,12 @@ Notes and exercises implemented in Python
 
 ## Summary
 ####  Algorithm Cheatsheet
-|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm-Supervised1.png" alt="Illustration" width="300px"/></a>|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm-Unsupervised1.png" alt="Illustration" width="300px"/></a>|
+|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm-Supervised1" alt="Illustration" width="300px"/></a>|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Machine-Learning_Algorithm-Unsupervised1.jepg" alt="Illustration" width="300px"/></a>|
 |:--:|:--:|
 |Supervised Learning|Unsupervised Learning|
 
 #### Summary of Machine Learning
-|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Summary_Machine-Learning.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Content.png" alt="Illustration" width="400px"/></a>|
+|<a href="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Summary_Machine-Learning.pdf"><img src="https://github.com/AllenSun7/CS229_Machine-Learning/blob/master/Notes-Summary/Content.jpg" alt="Illustration" width="400px"/></a>|
 |:--:|
 |Summary of Machine Learning|
 
